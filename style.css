@@ -6,8 +6,7 @@
   box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
 }
@@ -88,27 +87,22 @@ a {
 
 /* =========================
    PROJECT PAGE
+   Используй эти классы
+   на страницах проектов
 ========================= */
 
 .project-header {
   position: fixed;
-  top: 12px;
-  left: 12px;
+  top: 16px;
+  left: 16px;
   z-index: 100;
-  padding: 0;
-  margin: 0;
+  mix-blend-mode: difference;
 }
 
 .back-link {
-  display: inline-block;
-  color: #fff;
-  text-decoration: none;
   font-size: 14px;
   font-weight: 400;
-  line-height: 1;
-  padding: 6px 8px;
-  background: rgba(0, 0, 0, 0.55);
-  border-radius: 999px;
+  color: #fff;
 }
 
 .project-page {
@@ -161,12 +155,11 @@ a {
   }
 
   .project-header {
-    top: 10px;
-    left: 10px;
+    top: 12px;
+    left: 12px;
   }
 
   .back-link {
     font-size: 13px;
-    padding: 5px 7px;
   }
 }
