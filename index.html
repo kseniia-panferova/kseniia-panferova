@@ -4,14 +4,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portfolio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>My Portfolio</h1>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <h1 class="site-title">Your Name</h1>
+      <p class="site-subtitle">Portfolio</p>
+    </div>
+  </header>
 
-  <a href="projects/project-1/">
-    <img src="assets/img/project-1-cover.webp" alt="Project 1 cover" style="max-width: 500px; width: 100%;" />
-    <h2>Project 1</h2>
-  </a>
+  <main class="projects-grid">
+    <a class="project-card" href="projects/project-1/">
+      <img src="assets/img/project-1-cover.webp" alt="Project 1 cover" />
+      <h2>Project One</h2>
+    </a>
+
+    <a class="project-card" href="projects/project-2/">
+      <img src="assets/img/project-2-cover.webp" alt="Project 2 cover" />
+      <h2>Project Two</h2>
+    </a>
+
+    <a class="project-card" href="projects/project-3/">
+      <img src="assets/img/project-3-cover.webp" alt="Project 3 cover" />
+      <h2>Project Three</h2>
+    </a>
+
+    <a class="project-card" href="projects/project-4/">
+      <img src="assets/img/project-4-cover.webp" alt="Project 4 cover" />
+      <h2>Project Four</h2>
+    </a>
+  </main>
 </body>
 </html>
