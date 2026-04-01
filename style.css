@@ -34,7 +34,32 @@ a {
 /* =========================
    HOMEPAGE
 ========================= */
+.site-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 
+.site-nav {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding-top: 4px;
+}
+
+.site-nav a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 450;
+  line-height: 1;
+  opacity: 0.78;
+  transition: opacity 0.2s ease;
+}
+
+.site-nav a:hover {
+  opacity: 1;
+}
 .site-header {
   padding: 24px 20px 20px;
 }
