@@ -152,6 +152,12 @@ a {
   padding: 0;
 }
 
+.project-page {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .project-images {
   width: 100%;
   max-width: 1600px;
@@ -159,10 +165,12 @@ a {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  row-gap: 12px;
+  background: #000;
 }
 
 .project-images img {
+  display: block;
   width: 100%;
   max-width: 100%;
   height: auto;
