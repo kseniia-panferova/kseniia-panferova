@@ -203,4 +203,19 @@ a {
   .back-link {
     font-size: 13px;
   }
+   @media (max-width: 640px) {
+  .site-header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .site-nav {
+    gap: 16px;
+    padding-top: 8px;
+  }
+
+  .site-nav a {
+    font-size: 13px;
+  }
+}
 }
