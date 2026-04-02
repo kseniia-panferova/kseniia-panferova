@@ -1,3 +1,7 @@
+/* =========================
+   RESET / BASE
+========================= */
+
 * {
   box-sizing: border-box;
 }
@@ -27,6 +31,10 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+/* =========================
+   HOMEPAGE HEADER
+========================= */
 
 .site-header {
   padding: 24px 20px 20px;
@@ -77,6 +85,10 @@ a {
   opacity: 1;
 }
 
+/* =========================
+   HOMEPAGE GROUPS
+========================= */
+
 .projects-root {
   padding: 0 20px 48px;
 }
@@ -94,18 +106,24 @@ a {
   color: rgba(255, 255, 255, 0.65);
 }
 
+/* =========================
+   HOMEPAGE GRID
+========================= */
+
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(180px, 180px));
+  grid-template-columns: repeat(4, 180px);
   gap: 16px;
+  justify-content: start;
 }
 
 .project-card {
   display: block;
+  width: 180px;
 }
 
 .project-card img {
-  width: 100%;
+  width: 180px;
   height: auto;
 }
 
@@ -120,6 +138,7 @@ a {
   margin-bottom: 4px;
 }
 
+.project-card h2,
 .project-card h3 {
   margin: 0;
   font-size: 15px;
@@ -127,6 +146,10 @@ a {
   letter-spacing: -0.02em;
   line-height: 1.15;
 }
+
+/* =========================
+   PROJECT PAGE
+========================= */
 
 .project-header {
   position: fixed;
@@ -150,6 +173,12 @@ a {
   border-radius: 999px;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  transition: background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.back-link:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
 .project-page {
@@ -160,7 +189,7 @@ a {
 
 .project-images {
   width: 100%;
-  max-width: 220px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 0;
   display: flex;
@@ -175,6 +204,10 @@ a {
   margin: 0;
   padding: 0;
 }
+
+/* =========================
+   CV PAGE
+========================= */
 
 .cv-header {
   position: fixed;
@@ -214,9 +247,19 @@ a {
   line-height: 1.5;
 }
 
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+  .projects-grid {
+    grid-template-columns: repeat(3, 180px);
+  }
+}
+
 @media (max-width: 900px) {
   .projects-grid {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(2, 180px);
   }
 }
 
@@ -244,10 +287,19 @@ a {
   }
 
   .projects-grid {
+    grid-template-columns: 1fr;
     gap: 12px;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   }
 
+  .project-card {
+    width: 100%;
+  }
+
+  .project-card img {
+    width: 100%;
+  }
+
+  .project-card h2,
   .project-card h3 {
     font-size: 14px;
   }
