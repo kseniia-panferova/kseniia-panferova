@@ -39,6 +39,6 @@ const projects = [
     type: "W",
     title: "2020_W_Varshavskoye_Highway_141",
     slug: "2020_W_Varshavskoye_Highway_141",
-    cover: "2020_W_Varshavskoye_Highway_141-cover.webp"
+    cover: "assets/img/2020_W_Varshavskoye_Highway_141-cover.webp"
   },
 ];
