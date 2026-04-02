@@ -27,4 +27,11 @@ const projects = [
     slug: "2024_S_Factory_Reset",
     cover: "assets/img/2024_S_Factory_Reset-cover.webp"
   },
+     {
+    year: 2021,
+    type: "W",
+    title: "2021_W_Pavlovskaya_27",
+    slug: "2021_W_Pavlovskaya_27",
+    cover: "assets/img/2021_W_Pavlovskaya_27-cover.webp"
+  },
 ];
