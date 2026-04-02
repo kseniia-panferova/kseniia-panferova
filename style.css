@@ -1,12 +1,9 @@
-/* =========================
-   RESET / BASE
-========================= */
-
 * {
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
 }
@@ -31,35 +28,6 @@ a {
   text-decoration: none;
 }
 
-/* =========================
-   HOMEPAGE
-========================= */
-.site-brand {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.site-nav {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  padding-top: 4px;
-}
-
-.site-nav a {
-  color: #fff;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 450;
-  line-height: 1;
-  opacity: 0.78;
-  transition: opacity 0.2s ease;
-}
-
-.site-nav a:hover {
-  opacity: 1;
-}
 .site-header {
   padding: 24px 20px 20px;
 }
@@ -69,6 +37,12 @@ a {
   justify-content: space-between;
   align-items: flex-start;
   gap: 16px;
+}
+
+.site-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .site-title {
@@ -82,15 +56,48 @@ a {
 .site-subtitle {
   margin: 4px 0 0;
   font-size: 14px;
-  font-weight: 400;
   color: rgba(255, 255, 255, 0.72);
+}
+
+.site-nav {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding-top: 4px;
+}
+
+.site-nav a {
+  font-size: 14px;
+  font-weight: 450;
+  opacity: 0.78;
+  transition: opacity 0.2s ease;
+}
+
+.site-nav a:hover {
+  opacity: 1;
+}
+
+.projects-root {
+  padding: 0 20px 48px;
+}
+
+.project-group {
+  margin-bottom: 40px;
+}
+
+.project-group-title {
+  margin: 0 0 14px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
 }
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 20px;
-  padding: 0 20px 40px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
 }
 
 .project-card {
@@ -102,24 +109,29 @@ a {
   height: auto;
 }
 
-.project-card h2 {
-  margin: 10px 0 0;
-  font-size: 18px;
+.project-meta {
+  margin-top: 8px;
+}
+
+.project-year {
+  display: inline-block;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 4px;
+}
+
+.project-card h3 {
+  margin: 0;
+  font-size: 15px;
   font-weight: 450;
   letter-spacing: -0.02em;
   line-height: 1.15;
 }
 
-/* =========================
-   PROJECT PAGE
-   Используй эти классы
-   на страницах проектов
-========================= */
-
 .project-header {
   position: fixed;
-  top: 16px;
-  left: 16px;
+  top: 12px;
+  left: 12px;
   z-index: 100;
   padding: 0;
   margin: 0;
@@ -138,18 +150,6 @@ a {
   border-radius: 999px;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  transition: background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
-}
-
-.back-link:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.35);
-}
-
-.project-page {
-  width: 100%;
-  margin: 0;
-  padding: 0;
 }
 
 .project-page {
@@ -165,24 +165,58 @@ a {
   padding: 0;
   display: flex;
   flex-direction: column;
-  row-gap: 12px;
-  background: #000;
+  row-gap: 4px;
 }
 
 .project-images img {
-  display: block;
   width: 100%;
+  max-width: 100%;
   height: auto;
-  border-bottom: 12px solid #000;
+  margin: 0;
+  padding: 0;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+.cv-header {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 100;
+}
+
+.cv-page {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 80px 20px 48px;
+}
+
+.cv-title {
+  margin: 0 0 32px;
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 450;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.cv-section {
+  margin-bottom: 32px;
+}
+
+.cv-section h2 {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.cv-section p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
 
 @media (max-width: 900px) {
   .projects-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   }
 }
 
@@ -191,25 +225,6 @@ a {
     padding: 18px 16px 16px;
   }
 
-  .projects-grid {
-    gap: 16px;
-    padding: 0 16px 28px;
-  }
-
-  .project-card h2 {
-    font-size: 16px;
-    margin-top: 8px;
-  }
-
-  .project-header {
-    top: 12px;
-    left: 12px;
-  }
-
-  .back-link {
-    font-size: 13px;
-  }
-   @media (max-width: 640px) {
   .site-header-inner {
     flex-direction: column;
     align-items: flex-start;
@@ -223,5 +238,31 @@ a {
   .site-nav a {
     font-size: 13px;
   }
-}
+
+  .projects-root {
+    padding: 0 16px 32px;
+  }
+
+  .projects-grid {
+    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+
+  .project-card h3 {
+    font-size: 14px;
+  }
+
+  .project-header {
+    top: 10px;
+    left: 10px;
+  }
+
+  .back-link {
+    font-size: 14px;
+    padding: 9px 11px;
+  }
+
+  .cv-page {
+    padding: 72px 16px 36px;
+  }
 }

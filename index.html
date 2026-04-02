@@ -12,59 +12,87 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<header class="site-header">
-  <div class="site-header-inner">
-    <div class="site-brand">
-      <h1 class="site-title">Kseniia Panferova</h1>
-      <p class="site-subtitle">Portfolio</p>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <div class="site-brand">
+        <h1 class="site-title">Kseniia Panferova</h1>
+        <p class="site-subtitle">Portfolio</p>
+      </div>
+
+      <nav class="site-nav">
+        <a href="cv.html">CV</a>
+        <a href="mailto:yourmail@example.com">Contact</a>
+      </nav>
     </div>
+  </header>
 
-    <nav class="site-nav">
-      <a href="cv.html">CV</a>
-      <a href="mailto:panferova.ksenia@gmail.com">Contact</a>
-    </nav>
-  </div>
-</header>
+  <main id="projects-root" class="projects-root"></main>
 
-  <main class="projects-grid">
-    <a class="project-card" href="projects/2017_S_Navi_Pavilion/">
-      <img src="assets/img/project-1-cover.webp" alt="Project 1 cover" />
-      <h2>2017_S_Navi_Pavilion</h2>
-    </a>
+  <script src="projects.js"></script>
+  <script>
+    const typeMap = {
+      C: "Competition",
+      S: "Study",
+      A: "Art",
+      I: "Independent",
+      W: "Work"
+    };
 
-    <a class="project-card" href="projects/2021_A_Rybinskoye Reservoir/">
-      <img src="assets/img/project-2-cover.webp" alt="Project 2 cover" />
-      <h2>2021_A_Rybinskoye Reservoir</h2>
-    </a>
+    const typeOrder = ["C", "S", "A", "I", "W"];
 
-    <a class="project-card" href="projects/2023_С_Last_Glow/">
-      <img src="assets/img/project-3-cover.webp" alt="Project 3 cover" />
-      <h2>2023_С_Last_Glow</h2>
-    </a>
+    const sortedProjects = [...projects].sort((a, b) => {
+      if (b.year !== a.year) return b.year - a.year;
+      return a.title.localeCompare(b.title);
+    });
 
-    <a class="project-card" href="projects/project-4/">
-      <img src="assets/img/project-4-cover.webp" alt="Project 4 cover" />
-      <h2>Project Four</h2>
-    </a>
-        <a class="project-card" href="projects/2017_S_Navi_Pavilion/">
-      <img src="assets/img/project-1-cover.webp" alt="Project 1 cover" />
-      <h2>2017_S_Navi_Pavilion</h2>
-    </a>
+    const groupedProjects = {};
 
-    <a class="project-card" href="projects/2021_A_Rybinskoye Reservoir/">
-      <img src="assets/img/project-2-cover.webp" alt="Project 2 cover" />
-      <h2>2021_A_Rybinskoye Reservoir</h2>
-    </a>
+    typeOrder.forEach(type => {
+      groupedProjects[type] = [];
+    });
 
-    <a class="project-card" href="projects/2023_С_Last_Glow/">
-      <img src="assets/img/project-3-cover.webp" alt="Project 3 cover" />
-      <h2>2023_С_Last_Glow</h2>
-    </a>
+    sortedProjects.forEach(project => {
+      if (groupedProjects[project.type]) {
+        groupedProjects[project.type].push(project);
+      }
+    });
 
-    <a class="project-card" href="projects/project-4/">
-      <img src="assets/img/project-4-cover.webp" alt="Project 4 cover" />
-      <h2>Project Four</h2>
-    </a>
-  </main>
+    const root = document.getElementById("projects-root");
+
+    typeOrder.forEach(type => {
+      const items = groupedProjects[type];
+      if (!items.length) return;
+
+      const section = document.createElement("section");
+      section.className = "project-group";
+
+      const heading = document.createElement("h2");
+      heading.className = "project-group-title";
+      heading.textContent = typeMap[type];
+
+      const grid = document.createElement("div");
+      grid.className = "projects-grid";
+
+      items.forEach(project => {
+        const card = document.createElement("a");
+        card.className = "project-card";
+        card.href = `projects/${project.slug}/`;
+
+        card.innerHTML = `
+          <img src="${project.cover}" alt="${project.title} cover">
+          <div class="project-meta">
+            <span class="project-year">${project.year}</span>
+            <h3>${project.title}</h3>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      section.appendChild(heading);
+      section.appendChild(grid);
+      root.appendChild(section);
+    });
+  </script>
 </body>
 </html>
