@@ -20,4 +20,11 @@ const projects = [
     slug: "2023_С_Last_Glow",
     cover: "assets/img/2023_С_Last_Glow-cover.webp"
   },
+   {
+    year: 2024,
+    type: "S",
+    title: "2024_S_Factory_Reset",
+    slug: "2024_S_Factory_Reset",
+    cover: "assets/img/2024_S_Factory_Reset-cover.webp"
+  },
 ];
