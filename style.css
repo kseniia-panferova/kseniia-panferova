@@ -286,10 +286,9 @@ a {
     padding: 0 16px 32px;
   }
 
-  .projects-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
+ .projects-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
 
   .project-card {
     width: 100%;

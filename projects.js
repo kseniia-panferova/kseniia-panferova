@@ -34,4 +34,11 @@ const projects = [
     slug: "2021_W_Pavlovskaya_27",
     cover: "assets/img/2021_W_Pavlovskaya_27-cover.webp"
   },
+       {
+    year: 2020,
+    type: "W",
+    title: "2020_W_Varshavskoye_Highway_141",
+    slug: "2020_W_Varshavskoye_Highway_141",
+    cover: "2020_W_Varshavskoye_Highway_141-cover.webp"
+  },
 ];
