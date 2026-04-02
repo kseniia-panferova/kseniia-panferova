@@ -96,7 +96,7 @@ a {
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(4, 220px);
+  grid-template-columns: repeat(auto-fill, minmax(180px, 180px));
   gap: 16px;
 }
 
