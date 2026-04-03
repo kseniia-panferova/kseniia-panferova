@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Photography</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="gallery.css" />
+</head>
+<body>
+  <header class="project-header">
+    <a class="back-link" href="index.html">← Back</a>
+  </header>
+
+  <main class="gallery-page">
+    <h1 class="gallery-title">Photography</h1>
+    <section id="gallery-grid" class="gallery-grid"></section>
+  </main>
+
+  <div id="lightbox" class="lightbox hidden">
+    <button id="lightbox-close" class="lightbox-close" aria-label="Close">×</button>
+    <div class="lightbox-inner">
+      <img id="lightbox-image" class="lightbox-image" src="" alt="">
+      <div id="lightbox-caption" class="lightbox-caption"></div>
+    </div>
+  </div>
+
+  <script src="photography.js"></script>
+  <script>
+    const grid = document.getElementById("gallery-grid");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImage = document.getElementById("lightbox-image");
+    const lightboxCaption = document.getElementById("lightbox-caption");
+    const lightboxClose = document.getElementById("lightbox-close");
+
+    photography.forEach(item => {
+      const button = document.createElement("button");
+      button.className = "gallery-item";
+      button.type = "button";
+
+      const img = document.createElement("img");
+      img.src = `assets/photography/${item.file}`;
+      img.alt = item.text || "";
+
+      button.appendChild(img);
+
+      button.addEventListener("click", () => {
+        lightboxImage.src = `assets/photography/${item.file}`;
+        lightboxImage.alt = item.text || "";
+        lightboxCaption.textContent = [item.date, item.text].filter(Boolean).join(" — ");
+        lightbox.classList.remove("hidden");
+      });
+
+      grid.appendChild(button);
+    });
+
+    lightboxClose.addEventListener("click", () => {
+      lightbox.classList.add("hidden");
+      lightboxImage.src = "";
+      lightboxCaption.textContent = "";
+    });
+
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) {
+        lightbox.classList.add("hidden");
+        lightboxImage.src = "";
+        lightboxCaption.textContent = "";
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        lightbox.classList.add("hidden");
+        lightboxImage.src = "";
+        lightboxCaption.textContent = "";
+      }
+    });
+  </script>
+</body>
+</html>
