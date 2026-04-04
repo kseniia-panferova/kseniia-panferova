@@ -1,7 +1,7 @@
 from pathlib import Path
 import json
 
-ROOT = Path(__file__).parent
+ROOT = Path(__file__).resolve().parent.parent
 
 DRAWINGS_DIR = ROOT / "assets" / "drawings"
 PHOTOGRAPHY_DIR = ROOT / "assets" / "photography"
@@ -12,7 +12,11 @@ PHOTOGRAPHY_JS = ROOT / "photography.js"
 
 def build_items(folder: Path):
     files = sorted(
-        [p.name for p in folder.iterdir() if p.is_file() and p.suffix.lower() in [".webp", ".jpg", ".jpeg", ".png"]]
+        [
+            p.name
+            for p in folder.iterdir()
+            if p.is_file() and p.suffix.lower() in [".webp", ".jpg", ".jpeg", ".png"]
+        ]
     )
     return [{"file": name} for name in files]
 
