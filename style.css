@@ -63,7 +63,7 @@ a {
 
 .site-subtitle {
   margin: 4px 0 0;
-  font-size: 14px;
+  font-size: 18px;
   color: rgba(255, 255, 255, 0.72);
 }
 
@@ -75,7 +75,7 @@ a {
 }
 
 .site-nav a {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 450;
   opacity: 0.78;
   transition: opacity 0.2s ease;
