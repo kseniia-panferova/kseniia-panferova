@@ -41,4 +41,11 @@ const projects = [
     slug: "2020_W Varshavskoye Highway_141",
     cover: "assets/img/2020_W_Varshavskoye_Highway_141-cover.webp"
   },
+    {
+    year: 2022,
+    type: "C",
+    title: "2022_C Devinska Kobyla",
+    slug: "2022_C Devinska Kobyla",
+    cover: "assets/img/2022_C_Devinska_Kobyla 6-cover.webp"
+  },
 ];
