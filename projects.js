@@ -48,4 +48,11 @@ const projects = [
     slug: "2022_C_Devinska_Kobyla",
     cover: "assets/img/2022_C_Devinska_Kobyla 6-cover.webp"
   },
+      {
+    year: 2024,
+    type: "A",
+    title: "Chess",
+    slug: "2024_A_Exhibition_Model",
+    cover: "assets/img/2024_A_Exhibition_Model-cover.webp"
+  },
 ];
