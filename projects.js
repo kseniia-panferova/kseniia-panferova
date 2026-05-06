@@ -10,7 +10,7 @@ const projects = [
     year: 2021,
     type: "A",
     title: "Rybinskoye Reservoir",
-    slug: "2021_A_Rybinskoye_Reservoir",
+    slug: "2021_A_Rybinskoye Reservoir",
     cover: "assets/img/2021_A_Rybinskoye Reservoir-cover.webp"
   },
   {
@@ -38,7 +38,7 @@ const projects = [
     year: 2020,
     type: "W",
     title: "Varshavskoye Highway 141",
-    slug: "2020_W_Varshavskoye Highway_141",
+    slug: "2020_W_Varshavskoye_Highway_141",
     cover: "assets/img/2020_W_Varshavskoye_Highway_141-cover.webp"
   },
     {
