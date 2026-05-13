@@ -62,4 +62,11 @@ const projects = [
     slug: "2023_A_Factory_of_Nothing_Tapes",
     cover: "assets/img/2023_A_Factory_of_Nothing_Tapes-cover.webp"
   },
+    {
+    year: 2023,
+    type: "A",
+    title: "No Soup Exhibition",
+    slug: "2023_A_No_Soup_Exhibition",
+    cover: "2023_A_No_Soup_Exhibition-cover.webp"
+  },
 ];
