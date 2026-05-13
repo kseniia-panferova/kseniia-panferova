@@ -67,6 +67,6 @@ const projects = [
     type: "A",
     title: "No Soup Exhibition",
     slug: "2023_A_No_Soup_Exhibition",
-    cover: "2023_A_No_Soup_Exhibition-cover.webp"
+    cover: "assets/img/2023_A_No_Soup_Exhibition-cover.webp"
   },
 ];
