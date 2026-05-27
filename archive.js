@@ -2,10 +2,10 @@
 // To add projects, edit projects.js only.
 
 const projectTypeLabels = {
-  A: "Architecture / research",
-  S: "Spatial studies",
-  C: "Competitions",
-  W: "Work / professional"
+  A: "Art",
+  S: "Study",
+  C: "Competition",
+  W: "Work"
 };
 
 const projectTypeOrder = ["A", "S", "C", "W"];
