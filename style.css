@@ -506,13 +506,15 @@ button {
     border-radius: 22px;
   }
 
-  .interest-node {
-  width: 120px;
-  height: 120px;
-  padding: 0;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.06);
+.interest-node {
+  border: none;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255,255,255,0.16),
+    rgba(255,255,255,0.05) 55%,
+    rgba(255,255,255,0.02) 100%
+  );
+  box-shadow: 0 0 40px rgba(255,255,255,0.06);
 }
 
   .interest-panel {
