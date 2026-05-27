@@ -507,16 +507,13 @@ button {
   }
 
   .interest-node {
-    max-width: 150px;
-    padding: 9px 12px;
-  }
-
-  .interest-node--small,
-  .interest-node--medium,
-  .interest-node--large {
-    font-size: 13px;
-    min-height: 34px;
-  }
+  width: 120px;
+  height: 120px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+}
 
   .interest-panel {
     border-radius: 22px;
