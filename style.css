@@ -1,6 +1,4 @@
-/* =========================
-   RESET / BASE
-========================= */
+/* ========================= RESET / BASE ========================= */
 
 * {
   box-sizing: border-box;
@@ -15,7 +13,7 @@ body {
 body {
   background: #000;
   color: #fff;
-  font-family: "Inter", sans-serif;
+  font-family: Inter, Arial, Helvetica, sans-serif;
   font-weight: 400;
   line-height: 1.3;
   -webkit-font-smoothing: antialiased;
@@ -32,11 +30,15 @@ a {
   text-decoration: none;
 }
 
-/* =========================
-   HOMEPAGE HEADER
-========================= */
+button {
+  font: inherit;
+}
+
+/* ========================= SHARED HEADER ========================= */
 
 .site-header {
+  position: relative;
+  z-index: 20;
   padding: 24px 20px 20px;
 }
 
@@ -44,7 +46,7 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 16px;
+  gap: 24px;
 }
 
 .site-brand {
@@ -63,6 +65,7 @@ a {
 
 .site-subtitle {
   margin: 4px 0 0;
+  max-width: 560px;
   font-size: 18px;
   color: rgba(255, 255, 255, 0.72);
 }
@@ -70,14 +73,16 @@ a {
 .site-nav {
   display: flex;
   align-items: flex-start;
-  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 18px;
   padding-top: 4px;
 }
 
 .site-nav a {
   font-size: 18px;
   font-weight: 450;
-  opacity: 0.78;
+  opacity: 0.72;
   transition: opacity 0.2s ease;
 }
 
@@ -85,16 +90,215 @@ a {
   opacity: 1;
 }
 
-/* =========================
-   HOMEPAGE GROUPS
-========================= */
+/* ========================= HOME / INTEREST GRAPH ========================= */
+
+.home-page {
+  min-height: 100vh;
+}
+
+.interest-page {
+  padding: 0 20px 40px;
+}
+
+.interest-intro {
+  max-width: 760px;
+  margin: 28px 0 24px;
+}
+
+.interest-intro p {
+  margin: 0;
+  font-size: clamp(22px, 3vw, 42px);
+  font-weight: 420;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.interest-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 24px;
+  align-items: stretch;
+  min-height: 560px;
+}
+
+.interest-graph {
+  position: relative;
+  min-height: 620px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.12), transparent 26%),
+    radial-gradient(circle at 78% 70%, rgba(255, 255, 255, 0.08), transparent 26%),
+    #030303;
+}
+
+.graph-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.graph-line {
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 0.12;
+  vector-effect: non-scaling-stroke;
+}
+
+.graph-nodes {
+  position: absolute;
+  inset: 0;
+}
+
+.interest-node {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 210px;
+  min-height: 42px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.58);
+  color: #fff;
+  cursor: pointer;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: floatNode 7s ease-in-out infinite;
+  animation-delay: var(--delay);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.interest-node:hover,
+.interest-node.is-active {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(255, 255, 255, 0.94);
+  color: #000;
+  z-index: 5;
+}
+
+.interest-node:hover {
+  transform: translate(-50%, -50%) scale(1.04);
+}
+
+.interest-node--small {
+  font-size: 14px;
+  min-height: 36px;
+}
+
+.interest-node--medium {
+  font-size: 16px;
+}
+
+.interest-node--large {
+  font-size: 20px;
+  min-height: 52px;
+  padding: 14px 20px;
+}
+
+.interest-node-label {
+  display: block;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+@keyframes floatNode {
+  0%,
+  100% {
+    margin-top: calc(var(--float) * -0.45);
+    margin-left: 0;
+  }
+
+  50% {
+    margin-top: calc(var(--float) * 0.55);
+    margin-left: calc(var(--float) * 0.35);
+  }
+}
+
+.interest-panel {
+  min-height: 620px;
+  padding: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.panel-kicker,
+.panel-projects h3 {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 520;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.interest-panel h2 {
+  margin: 0 0 14px;
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 430;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.interest-panel p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.panel-empty,
+.panel-note {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.panel-projects {
+  margin-top: 28px;
+}
+
+.panel-project {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.panel-project:hover .panel-project-title {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.panel-project-year {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.panel-project-title {
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+/* ========================= ARCHIVE / PROJECT GRID ========================= */
 
 .projects-root {
-  padding: 0 20px 48px;
+  padding: 8px 20px 48px;
 }
 
 .project-group {
-  margin-bottom: 10px;
+  margin-bottom: 18px;
 }
 
 .project-group-title {
@@ -105,10 +309,6 @@ a {
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.65);
 }
-
-/* =========================
-   HOMEPAGE GRID
-========================= */
 
 .projects-grid {
   display: grid;
@@ -124,6 +324,7 @@ a {
 .project-card img {
   width: 100%;
   height: auto;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .project-meta {
@@ -132,9 +333,9 @@ a {
 
 .project-year {
   display: inline-block;
+  margin-bottom: 4px;
   font-size: 12px;
   color: rgba(255, 255, 255, 0.55);
-  margin-bottom: 4px;
 }
 
 .project-card h2,
@@ -146,9 +347,7 @@ a {
   line-height: 1.15;
 }
 
-/* =========================
-   PROJECT PAGE
-========================= */
+/* ========================= PROJECT PAGE ========================= */
 
 .project-header {
   position: fixed;
@@ -204,9 +403,7 @@ a {
   padding: 0;
 }
 
-/* =========================
-   CV PAGE
-========================= */
+/* ========================= SIMPLE CONTENT PAGES ========================= */
 
 .cv-header {
   position: fixed;
@@ -215,13 +412,15 @@ a {
   z-index: 100;
 }
 
-.cv-page {
+.cv-page,
+.content-page {
   max-width: 820px;
   margin: 0 auto;
   padding: 80px 20px 48px;
 }
 
-.cv-title {
+.cv-title,
+.content-title {
   margin: 0 0 32px;
   font-size: clamp(32px, 5vw, 56px);
   font-weight: 450;
@@ -229,26 +428,46 @@ a {
   line-height: 1;
 }
 
-.cv-section {
+.cv-section,
+.content-section {
   margin-bottom: 32px;
 }
 
-.cv-section h2 {
+.cv-section h2,
+.content-section h2 {
   margin: 0 0 10px;
   font-size: 20px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.72);
 }
 
-.cv-section p {
+.cv-section p,
+.content-section p {
   margin: 0;
   font-size: 16px;
   line-height: 1.5;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* ========================= RESPONSIVE ========================= */
+
+@media (max-width: 900px) {
+  .interest-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .interest-graph,
+  .interest-panel {
+    min-height: auto;
+  }
+
+  .interest-graph {
+    height: 620px;
+  }
+
+  .interest-panel {
+    padding: 20px;
+  }
+}
 
 @media (max-width: 640px) {
   .site-header {
@@ -261,12 +480,46 @@ a {
   }
 
   .site-nav {
-    gap: 16px;
-    padding-top: 0px;
+    justify-content: flex-start;
+    gap: 14px;
+    padding-top: 0;
   }
 
   .site-nav a {
-    font-size: 17px;
+    font-size: 16px;
+  }
+
+  .interest-page {
+    padding: 0 16px 32px;
+  }
+
+  .interest-intro {
+    margin-top: 20px;
+  }
+
+  .interest-layout {
+    gap: 16px;
+  }
+
+  .interest-graph {
+    height: 520px;
+    border-radius: 22px;
+  }
+
+  .interest-node {
+    max-width: 150px;
+    padding: 9px 12px;
+  }
+
+  .interest-node--small,
+  .interest-node--medium,
+  .interest-node--large {
+    font-size: 13px;
+    min-height: 34px;
+  }
+
+  .interest-panel {
+    border-radius: 22px;
   }
 
   .projects-root {
@@ -310,7 +563,14 @@ a {
     padding: 9px 11px;
   }
 
-  .cv-page {
+  .cv-page,
+  .content-page {
     padding: 72px 16px 36px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interest-node {
+    animation: none;
   }
 }

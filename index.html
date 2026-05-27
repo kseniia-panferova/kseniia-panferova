@@ -1,102 +1,52 @@
-<!-- republish -->
-<!DOCTYPE html>
-<html lang="ru">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kseniia Panferova</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
+
+<body class="home-page">
   <header class="site-header">
     <div class="site-header-inner">
       <div class="site-brand">
-        <h1 class="site-title">Kseniia Panferova(under construction)</h1>
-        <p class="site-subtitle">Portfolio</p>
+        <h1 class="site-title"><a href="./">Kseniia Panferova</a></h1>
+        <p class="site-subtitle">architecture / landscape / mapping / research</p>
       </div>
 
-
-      <nav class="site-nav">
-        <a href="cv.html">CV</a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="archive/">Archive</a>
         <a href="drawings.html">Drawings</a>
         <a href="photography.html">Photography</a>
-        <a href="contact.html">Statement / Contact</a>
+        <a href="cv.html">CV</a>
+        <a href="contact.html">Contact</a>
       </nav>
     </div>
   </header>
 
-  <main id="projects-root" class="projects-root"></main>
+  <main class="interest-page">
+    <section class="interest-intro" aria-label="Introduction">
+      <p>
+        A working map of current interests, research directions and recurring spatial questions.
+        Click a node to see related projects.
+      </p>
+    </section>
+
+    <section class="interest-layout" aria-label="Interest graph">
+      <div class="interest-graph" id="interest-graph">
+        <svg class="graph-lines" id="graph-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
+        <div class="graph-nodes" id="graph-nodes"></div>
+      </div>
+
+      <aside class="interest-panel" id="interest-panel" aria-live="polite">
+        <p class="panel-empty">Choose a topic from the map.</p>
+      </aside>
+    </section>
+  </main>
 
   <script src="projects.js"></script>
-  <script>
-    const typeMap = {
-      C: "Competition",
-      S: "Study",
-      A: "Art",
-      I: "Independent",
-      W: "Work"
-    };
-
-    const typeOrder = ["W", "C", "S", "A", "I"];
-
-    const sortedProjects = [...projects].sort((a, b) => {
-      if (b.year !== a.year) return b.year - a.year;
-      return a.title.localeCompare(b.title);
-    });
-
-    const groupedProjects = {};
-
-    typeOrder.forEach(type => {
-      groupedProjects[type] = [];
-    });
-
-    sortedProjects.forEach(project => {
-      if (groupedProjects[project.type]) {
-        groupedProjects[project.type].push(project);
-      }
-    });
-
-    const root = document.getElementById("projects-root");
-
-    typeOrder.forEach(type => {
-      const items = groupedProjects[type];
-      if (!items.length) return;
-
-      const section = document.createElement("section");
-      section.className = "project-group";
-
-      const heading = document.createElement("h2");
-      heading.className = "project-group-title";
-      heading.textContent = typeMap[type];
-
-      const grid = document.createElement("div");
-      grid.className = "projects-grid";
-
-      items.forEach(project => {
-        const card = document.createElement("a");
-        card.className = "project-card";
-        card.href = `projects/${project.slug}/`;
-
-        card.innerHTML = `
-          <img src="${project.cover}" alt="${project.title} cover">
-          <div class="project-meta">
-            <span class="project-year">${project.year}</span>
-            <h3>${project.title}</h3>
-          </div>
-        `;
-
-        grid.appendChild(card);
-      });
-
-      section.appendChild(heading);
-      section.appendChild(grid);
-      root.appendChild(section);
-    });
-  </script>
+  <script src="interests.js"></script>
+  <script src="graph.js"></script>
 </body>
 </html>
