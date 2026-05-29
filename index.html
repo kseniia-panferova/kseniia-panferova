@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Kseniia Panferova</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/force-graph"></script>
 </head>
 
-<body class="home-page">
+<body class="home-page force-graph-page">
   <header class="site-header">
     <div class="site-header-inner">
       <div class="site-brand">
@@ -26,23 +27,14 @@
   </header>
 
   <main class="interest-page">
-    <section class="interest-intro" aria-label="Introduction">
-      <p>
-        A working map of current interests, research directions and recurring spatial questions.
-        Click a node to see related projects.
-      </p>
+    <section class="graph-intro" aria-label="Introduction">
+      <h2>Current interests as a working map</h2>
+      <p>Drag, zoom and click the points to open connected projects and research directions.</p>
     </section>
 
-    <section class="interest-layout" aria-label="Interest graph">
-      <div class="interest-graph" id="interest-graph">
-        <svg class="graph-lines" id="graph-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
-        <div class="graph-nodes" id="graph-nodes"></div>
-      </div>
+    <section class="interest-graph" id="interest-graph" aria-label="Interest graph"></section>
 
-      <aside class="interest-panel" id="interest-panel" aria-live="polite">
-        <p class="panel-empty">Choose a topic from the map.</p>
-      </aside>
-    </section>
+    <aside class="interest-panel" id="interest-panel" aria-live="polite"></aside>
   </main>
 
   <script src="projects.js"></script>
