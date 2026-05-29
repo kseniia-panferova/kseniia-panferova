@@ -2,16 +2,16 @@
 // To add projects, edit projects.js only.
 
 const projectTypeLabels = {
-  A: "Art",
-  S: "Study",
-  C: "Competition",
-  W: "Work"
+  A: "Architecture / research",
+  S: "Spatial studies",
+  C: "Competitions",
+  W: "Work / professional"
 };
 
 const projectTypeOrder = ["A", "S", "C", "W"];
 
 function projectUrl(slug) {
-  return `../projects/${encodeURI(slug)}/`;
+  return `../projects/${encodeURI(slug)}/?from=archive`;
 }
 
 function coverUrl(cover) {

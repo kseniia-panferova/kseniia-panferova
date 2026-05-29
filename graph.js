@@ -26,7 +26,7 @@ function escapeHTML(value) {
 }
 
 function projectUrl(slug) {
-  return `projects/${encodeURI(slug)}/`;
+  return `projects/${encodeURI(slug)}/?from=map`;
 }
 
 function normalizeLinks(interest) {
