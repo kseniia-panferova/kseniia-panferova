@@ -1,24 +1,20 @@
-// Dynamic force graph for the main page.
-// Requires force-graph from index.html.
-// Reads interests.js and projects.js.
+// Full-width static interest graph.
+// It reads interests.js and projects.js.
+// The info card appears near the selected point instead of living in a side column.
 
 const interestData = typeof interests !== "undefined" && Array.isArray(interests) ? interests : [];
 const projectData = typeof projects !== "undefined" && Array.isArray(projects) ? projects : [];
 
 const graphRoot = document.getElementById("interest-graph");
+const nodesRoot = document.getElementById("graph-nodes");
+const linesRoot = document.getElementById("graph-lines");
 const panelRoot = document.getElementById("interest-panel");
+const layoutRoot = document.querySelector(".interest-layout");
 
 const projectBySlug = new Map(projectData.map((project) => [project.slug, project]));
 const interestById = new Map(interestData.map((interest) => [interest.id, interest]));
 
-let graphInstance = null;
-let selectedNode = null;
-
-const sizeToValue = {
-  small: 2.4,
-  medium: 3.2,
-  large: 4.2
-};
+let selectedInterestId = null;
 
 function escapeHTML(value) {
   return String(value ?? "")
@@ -36,21 +32,13 @@ function projectUrl(slug) {
 function normalizeLinks(interest) {
   if (Array.isArray(interest.links)) {
     return interest.links
-      .map((link) => ({
-        target: link.target,
-        type: link.type || "context",
-        label: link.label || ""
-      }))
+      .map((link) => ({ target: link.target, type: link.type || "context", label: link.label || "" }))
       .filter((link) => link.target && interestById.has(link.target));
   }
 
   if (Array.isArray(interest.relatedTo)) {
     return interest.relatedTo
-      .map((target) => ({
-        target,
-        type: "context",
-        label: ""
-      }))
+      .map((target) => ({ target, type: "context", label: "" }))
       .filter((link) => link.target && interestById.has(link.target));
   }
 
@@ -73,49 +61,8 @@ function getSharedProjects(firstInterest, secondInterest) {
     .filter(Boolean);
 }
 
-function getPanelConnections(interest) {
-  const directLinks = normalizeLinks(interest);
-
-  const reverseLinks = interestData
-    .filter((other) => other.id !== interest.id)
-    .flatMap((other) => {
-      return normalizeLinks(other)
-        .filter((link) => link.target === interest.id)
-        .map((link) => ({
-          target: other.id,
-          type: link.type || "context",
-          label: link.label || "",
-          reverse: true
-        }));
-    });
-
-  const byTarget = new Map();
-
-  [...directLinks, ...reverseLinks].forEach((link) => {
-    if (!byTarget.has(link.target)) {
-      byTarget.set(link.target, link);
-    }
-  });
-
-  return [...byTarget.values()];
-}
-
-function buildGraphData() {
-  const nodes = interestData.map((interest, index) => ({
-    id: interest.id,
-    name: interest.title,
-    title: interest.title,
-    description: interest.description || "",
-    size: interest.size || "medium",
-    val: sizeToValue[interest.size] || sizeToValue.medium,
-    projectSlugs: interest.projectSlugs || [],
-    // Initial positions from interests.js, then the simulation can move them.
-    x: (Number(interest.x) - 50) * 7,
-    y: (Number(interest.y) - 50) * 4.5,
-    color: index % 3 === 0 ? "rgba(255,255,255,0.94)" : "rgba(255,255,255,0.78)"
-  }));
-
-  const uniqueLinks = new Map();
+function getAllUniqueLinks() {
+  const unique = new Map();
 
   interestData.forEach((source) => {
     normalizeLinks(source).forEach((link) => {
@@ -124,8 +71,8 @@ function buildGraphData() {
 
       const pairKey = [source.id, target.id].sort().join("__");
 
-      if (!uniqueLinks.has(pairKey)) {
-        uniqueLinks.set(pairKey, {
+      if (!unique.has(pairKey)) {
+        unique.set(pairKey, {
           source: source.id,
           target: target.id,
           type: link.type || "context",
@@ -135,10 +82,105 @@ function buildGraphData() {
     });
   });
 
-  return {
-    nodes,
-    links: [...uniqueLinks.values()]
-  };
+  return [...unique.values()];
+}
+
+function drawLines() {
+  if (!linesRoot) return;
+
+  linesRoot.innerHTML = "";
+
+  getAllUniqueLinks().forEach((link) => {
+    const source = interestById.get(link.source);
+    const target = interestById.get(link.target);
+
+    if (!source || !target) return;
+
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", source.x);
+    line.setAttribute("y1", source.y);
+    line.setAttribute("x2", target.x);
+    line.setAttribute("y2", target.y);
+    line.setAttribute("class", `graph-line graph-line--${link.type}`);
+    line.dataset.source = source.id;
+    line.dataset.target = target.id;
+    line.dataset.type = link.type;
+
+    linesRoot.appendChild(line);
+  });
+}
+
+function createNode(interest) {
+  const button = document.createElement("button");
+  button.className = `interest-node interest-node--${interest.size || "medium"}`;
+  button.type = "button";
+  button.dataset.interestId = interest.id;
+  button.setAttribute("aria-label", interest.title);
+
+  button.style.setProperty("--x", `${interest.x}%`);
+  button.style.setProperty("--y", `${interest.y}%`);
+
+  const label = document.createElement("span");
+  label.className = "interest-node-label";
+  label.textContent = interest.title;
+
+  button.appendChild(label);
+  button.addEventListener("click", (event) => {
+    event.stopPropagation();
+    selectInterest(interest.id);
+  });
+
+  return button;
+}
+
+function renderNodes() {
+  if (!nodesRoot) return;
+  nodesRoot.innerHTML = "";
+  interestData.forEach((interest) => nodesRoot.appendChild(createNode(interest)));
+}
+
+function isInterestLinked(sourceId, targetId) {
+  if (!sourceId || !targetId || sourceId === targetId) return false;
+
+  const source = interestById.get(sourceId);
+  const target = interestById.get(targetId);
+  if (!source || !target) return false;
+
+  const sourceLinks = normalizeLinks(source).some((link) => link.target === targetId);
+  const targetLinks = normalizeLinks(target).some((link) => link.target === sourceId);
+
+  return sourceLinks || targetLinks;
+}
+
+function setActiveGraphState(selectedId) {
+  document.querySelectorAll(".interest-node").forEach((node) => {
+    node.classList.toggle("is-active", node.dataset.interestId === selectedId);
+    node.classList.toggle("is-linked", isInterestLinked(selectedId, node.dataset.interestId));
+  });
+
+  document.querySelectorAll(".graph-line").forEach((line) => {
+    const isActive = line.dataset.source === selectedId || line.dataset.target === selectedId;
+    line.classList.toggle("is-active", isActive);
+  });
+}
+
+function getPanelConnections(interest) {
+  const directLinks = normalizeLinks(interest);
+
+  const reverseLinks = interestData
+    .filter((other) => other.id !== interest.id)
+    .flatMap((other) => {
+      return normalizeLinks(other)
+        .filter((link) => link.target === interest.id)
+        .map((link) => ({ target: other.id, type: link.type || "context", label: link.label || "", reverse: true }));
+    });
+
+  const byTarget = new Map();
+  [...directLinks, ...reverseLinks].forEach((link) => {
+    if (!byTarget.has(link.target)) byTarget.set(link.target, link);
+  });
+
+  return [...byTarget.values()];
 }
 
 function renderConnections(interest) {
@@ -188,47 +230,31 @@ function renderProjects(interest) {
   `).join("");
 }
 
-function getNodeByInterestId(id) {
-  if (!graphInstance) return null;
+function positionPanelNearInterest(interest) {
+  if (!panelRoot || !graphRoot || !layoutRoot) return;
 
-  const graphData = graphInstance.graphData();
-  return graphData.nodes.find((node) => node.id === id) || null;
-}
+  const graphRect = graphRoot.getBoundingClientRect();
+  const layoutRect = layoutRoot.getBoundingClientRect();
 
-function setActiveGraphState(nodeId) {
-  if (!graphRoot) return;
-
-  graphRoot.dataset.selectedNode = nodeId || "";
-
-  if (graphInstance) {
-    graphInstance.refresh();
-  }
-}
-
-function positionPanelNearNode(node) {
-  if (!panelRoot || !graphRoot || !graphInstance || !node) return;
+  const pointX = (interest.x / 100) * graphRect.width + (graphRect.left - layoutRect.left);
+  const pointY = (interest.y / 100) * graphRect.height + (graphRect.top - layoutRect.top);
 
   panelRoot.classList.add("is-active");
 
   requestAnimationFrame(() => {
-    const graphRect = graphRoot.getBoundingClientRect();
-    const coords = graphInstance.graph2ScreenCoords(node.x, node.y);
-
     const panelRect = panelRoot.getBoundingClientRect();
+    const graphWidth = graphRect.width;
+    const graphHeight = graphRect.height;
     const margin = 16;
+    const panelWidth = panelRect.width;
+    const panelHeight = panelRect.height;
 
-    let left = coords.x;
-    left = Math.max(panelRect.width / 2 + margin, Math.min(left, graphRect.width - panelRect.width / 2 - margin));
+    let left = pointX;
+    left = Math.max(panelWidth / 2 + margin, Math.min(left, graphWidth - panelWidth / 2 - margin));
 
-    let top = coords.y - panelRect.height - 22;
-
-    if (top < margin) {
-      top = coords.y + 22;
-    }
-
-    if (top + panelRect.height > graphRect.height - margin) {
-      top = graphRect.height - panelRect.height - margin;
-    }
+    let top = pointY - panelHeight - 18;
+    if (top < margin) top = pointY + 18;
+    if (top + panelHeight > graphHeight - margin) top = graphHeight - panelHeight - margin;
 
     panelRoot.style.left = `${left}px`;
     panelRoot.style.top = `${top}px`;
@@ -236,15 +262,14 @@ function positionPanelNearNode(node) {
   });
 }
 
-function openNode(node) {
-  const interest = interestById.get(node.id);
+function selectInterest(id) {
+  const interest = interestById.get(id);
   if (!interest || !panelRoot) return;
 
-  selectedNode = node;
-  setActiveGraphState(node.id);
+  selectedInterestId = id;
+  setActiveGraphState(id);
 
   panelRoot.innerHTML = `
-    <button class="panel-close" type="button" aria-label="Close">×</button>
     <div class="panel-kicker">current interest</div>
     <h2>${escapeHTML(interest.title)}</h2>
     <p>${escapeHTML(interest.description || "")}</p>
@@ -260,155 +285,41 @@ function openNode(node) {
     </div>
   `;
 
-  panelRoot.querySelector(".panel-close")?.addEventListener("click", (event) => {
-    event.stopPropagation();
-    closePanel();
-  });
-
   panelRoot.querySelectorAll("[data-select-interest]").forEach((button) => {
     button.addEventListener("click", (event) => {
       event.stopPropagation();
-      const nextNode = getNodeByInterestId(button.dataset.selectInterest);
-      if (nextNode) {
-        openNode(nextNode);
-      }
+      selectInterest(button.dataset.selectInterest);
     });
   });
 
-  positionPanelNearNode(node);
+  positionPanelNearInterest(interest);
 }
 
-function closePanel() {
-  selectedNode = null;
-
-  if (panelRoot) {
-    panelRoot.classList.remove("is-active");
-  }
-
+function hidePanel() {
+  selectedInterestId = null;
+  if (panelRoot) panelRoot.classList.remove("is-active");
   setActiveGraphState(null);
 }
 
-function isConnectedToSelected(node) {
-  if (!selectedNode || !graphInstance) return false;
+function initGraph() {
+  if (!graphRoot || !nodesRoot || !panelRoot) return;
 
-  const data = graphInstance.graphData();
+  if (!interestData.length) {
+    panelRoot.innerHTML = "<p class='panel-empty'>No interests found. Check interests.js.</p>";
+    panelRoot.classList.add("is-active");
+    return;
+  }
 
-  return data.links.some((link) => {
-    const sourceId = typeof link.source === "object" ? link.source.id : link.source;
-    const targetId = typeof link.target === "object" ? link.target.id : link.target;
+  drawLines();
+  renderNodes();
 
-    return (
-      (sourceId === selectedNode.id && targetId === node.id) ||
-      (targetId === selectedNode.id && sourceId === node.id)
-    );
+  graphRoot.addEventListener("click", () => hidePanel());
+
+  window.addEventListener("resize", () => {
+    if (!selectedInterestId) return;
+    const interest = interestById.get(selectedInterestId);
+    if (interest) positionPanelNearInterest(interest);
   });
 }
 
-function drawNode(node, ctx, globalScale) {
-  const isSelected = selectedNode && selectedNode.id === node.id;
-  const isLinked = isConnectedToSelected(node);
-
-  const radius = isSelected ? 5.6 : Math.max(2.8, node.val);
-  const label = node.name || "";
-  const fontSize = Math.max(9, 13 / globalScale);
-
-  ctx.beginPath();
-  ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
-  ctx.fillStyle = isSelected
-    ? "rgba(255,255,255,1)"
-    : isLinked
-      ? "rgba(255,255,255,0.90)"
-      : node.color || "rgba(255,255,255,0.76)";
-  ctx.fill();
-
-  ctx.shadowColor = "rgba(255,255,255,0.25)";
-  ctx.shadowBlur = isSelected ? 14 : isLinked ? 8 : 0;
-  ctx.fill();
-  ctx.shadowBlur = 0;
-
-  ctx.font = `${fontSize}px Inter, Arial, sans-serif`;
-  ctx.textAlign = "left";
-  ctx.textBaseline = "middle";
-  ctx.fillStyle = isSelected || isLinked
-    ? "rgba(255,255,255,0.98)"
-    : "rgba(255,255,255,0.78)";
-
-  ctx.fillText(label, node.x + radius + 7, node.y);
-}
-
-function resizeGraph() {
-  if (!graphInstance || !graphRoot) return;
-
-  graphInstance
-    .width(graphRoot.clientWidth)
-    .height(graphRoot.clientHeight);
-
-  if (selectedNode) {
-    positionPanelNearNode(selectedNode);
-  }
-}
-
-function initForceGraph() {
-  if (!graphRoot || !panelRoot) return;
-
-  if (typeof ForceGraph === "undefined") {
-    graphRoot.innerHTML = "<p class='graph-error'>ForceGraph did not load. Check the CDN script in index.html.</p>";
-    return;
-  }
-
-  if (!interestData.length) {
-    graphRoot.innerHTML = "<p class='graph-error'>No interests found. Check interests.js.</p>";
-    return;
-  }
-
-  const graphData = buildGraphData();
-
-  graphInstance = ForceGraph()(graphRoot)
-    .graphData(graphData)
-    .backgroundColor("rgba(0,0,0,0)")
-    .nodeId("id")
-    .nodeLabel((node) => node.name)
-    .nodeVal((node) => node.val)
-    .nodeColor((node) => node.color)
-    .linkColor((link) => {
-      const sourceId = typeof link.source === "object" ? link.source.id : link.source;
-      const targetId = typeof link.target === "object" ? link.target.id : link.target;
-
-      if (selectedNode && (sourceId === selectedNode.id || targetId === selectedNode.id)) {
-        return "rgba(255,255,255,0.58)";
-      }
-
-      return "rgba(255,255,255,0.16)";
-    })
-    .linkWidth((link) => {
-      const sourceId = typeof link.source === "object" ? link.source.id : link.source;
-      const targetId = typeof link.target === "object" ? link.target.id : link.target;
-
-      return selectedNode && (sourceId === selectedNode.id || targetId === selectedNode.id) ? 1.4 : 0.8;
-    })
-    .linkDirectionalParticles(0)
-    .cooldownTicks(140)
-    .d3VelocityDecay(0.30)
-    .nodeCanvasObject(drawNode)
-    .onNodeClick((node) => {
-      openNode(node);
-    })
-    .onBackgroundClick(() => {
-      closePanel();
-    });
-
-  graphInstance.d3Force("charge").strength(-95);
-  graphInstance.d3Force("link").distance(115);
-  graphInstance.d3Force("center").strength(0.045);
-
-  resizeGraph();
-
-  // Start slightly zoomed out so labels have air around them.
-  setTimeout(() => {
-    graphInstance.zoom(0.92, 500);
-  }, 300);
-
-  window.addEventListener("resize", resizeGraph);
-}
-
-initForceGraph();
+initGraph();
